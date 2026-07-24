@@ -1,13 +1,26 @@
-const express = require("express");
-
-const app = express();
+require('dotenv').config();
+const app = require('./app');
+const connectDB = require('./config/database');
+const logger = require('./utils/logger');
 
 const PORT = process.env.PORT || 5000;
 
-app.get("/", (req, res) => {
-  res.send("HackVerse Backend is Running 🚀");
-});
+// Initialize server bootstrap routine
+const startServer = async () => {
+  try {
+    // 1. Establish database connections
+    await connectDB();
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+    // 2. Start listening to port requests
+    app.listen(PORT, () => {
+      logger.info(`HackVerse Backend Server listening on port: ${PORT}`);
+      logger.info(`Environment mode: ${process.env.NODE_ENV}`);
+      logger.info(`Local Endpoint: http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    logger.error('Failed to boot HackVerse server: ', err);
+    process.exit(1);
+  }
+};
+
+startServer();
