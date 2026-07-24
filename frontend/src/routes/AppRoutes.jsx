@@ -38,6 +38,21 @@ import SubmissionHistory from '../pages/Participant/SubmissionHistory';
 import Notifications from '../pages/Participant/Notifications';
 import ParticipantProfile from '../pages/Participant/ParticipantProfile';
 
+// Phase 5 Organizer Module pages
+import OrganizerDashboard from '../pages/Organizer/OrganizerDashboard';
+import OrganizerHackathons from '../pages/Organizer/MyHackathons';
+import CreateHackathon from '../pages/Organizer/CreateHackathon';
+import EditHackathon from '../pages/Organizer/EditHackathon';
+import ViewHackathon from '../pages/Organizer/ViewHackathon';
+import ManageRegistrations from '../pages/Organizer/ManageRegistrations';
+import ManageTeams from '../pages/Organizer/ManageTeams';
+import AssignJudges from '../pages/Organizer/AssignJudges';
+import ManageSubmissions from '../pages/Organizer/ManageSubmissions';
+import Results from '../pages/Organizer/Results';
+import Analytics from '../pages/Organizer/Analytics';
+import OrganizerNotifications from '../pages/Organizer/Notifications';
+import OrganizerProfile from '../pages/Organizer/Profile';
+
 export const AppRoutes = () => {
   return (
     <Routes>
@@ -142,6 +157,21 @@ export const AppRoutes = () => {
       <Route path="/participant/submissions" element={<SubmissionHistory />} />
       <Route path="/participant/notifications" element={<Notifications />} />
       <Route path="/participant/profile" element={<ParticipantProfile />} />
+
+      {/* Phase 5 Organizer Module Routes */}
+      <Route path="/organizer/dashboard" element={<OrganizerDashboard />} />
+      <Route path="/organizer/hackathons" element={<OrganizerHackathons />} />
+      <Route path="/organizer/hackathon/create" element={<CreateHackathon />} />
+      <Route path="/organizer/hackathon/edit/:id" element={<EditHackathon />} />
+      <Route path="/organizer/hackathon/:id" element={<ViewHackathon />} />
+      <Route path="/organizer/registrations" element={<ManageRegistrations />} />
+      <Route path="/organizer/teams" element={<ManageTeams />} />
+      <Route path="/organizer/judges" element={<AssignJudges />} />
+      <Route path="/organizer/submissions" element={<ManageSubmissions />} />
+      <Route path="/organizer/results" element={<Results />} />
+      <Route path="/organizer/analytics" element={<Analytics />} />
+      <Route path="/organizer/profile" element={<OrganizerProfile />} />
+      <Route path="/organizer/notifications" element={<OrganizerNotifications />} />
 
       {/* Showcase & Dashboard Demo */}
       <Route
