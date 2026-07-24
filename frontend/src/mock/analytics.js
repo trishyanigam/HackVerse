@@ -1,3 +1,4 @@
+// Organizer Analytics Data
 export const registrationTrend = [
   { name: 'Jan', registrations: 120 },
   { name: 'Feb', registrations: 210 },
@@ -46,4 +47,32 @@ export const participantStats = [
   { label: 'Students', value: 72 },
   { label: 'Professionals', value: 20 },
   { label: 'Researchers', value: 8 },
+];
+
+// Judge Analytics Data
+export const scoresDistribution = [
+  { range: '60-70', count: 1 },
+  { range: '70-80', count: 3 },
+  { range: '80-90', count: 8 },
+  { range: '90-100', count: 4 },
+];
+
+export const reviewsTrend = [
+  { name: 'Completed', value: 5, color: '#10b981' },
+  { name: 'Pending', value: 3, color: '#f59e0b' },
+];
+
+export const monthlyReviews = [
+  { name: 'Mar', reviews: 2 },
+  { name: 'Apr', reviews: 4 },
+  { name: 'May', reviews: 3 },
+  { name: 'Jun', reviews: 6 },
+  { name: 'Jul', reviews: 8 },
+];
+
+export const averageScores = [
+  { hackathon: 'CodeSprint', avgScore: 84 },
+  { hackathon: 'Web3 Innovate', avgScore: 89 },
+  { hackathon: 'AI Builder Fest', avgScore: 78 },
+  { hackathon: 'HealthTech', avgScore: 81 },
 ];

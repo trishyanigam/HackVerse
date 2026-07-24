@@ -53,6 +53,16 @@ import Analytics from '../pages/Organizer/Analytics';
 import OrganizerNotifications from '../pages/Organizer/Notifications';
 import OrganizerProfile from '../pages/Organizer/Profile';
 
+// Phase 6 Judge Module pages
+import JudgeDashboard from '../pages/Judge/JudgeDashboard';
+import AssignedProjects from '../pages/Judge/AssignedProjects';
+import ProjectDetails from '../pages/Judge/ProjectDetails';
+import ProjectEvaluation from '../pages/Judge/ProjectEvaluation';
+import EvaluationHistory from '../pages/Judge/EvaluationHistory';
+import JudgeAnalytics from '../pages/Judge/JudgeAnalytics';
+import JudgeNotifications from '../pages/Judge/JudgeNotifications';
+import JudgeProfile from '../pages/Judge/JudgeProfile';
+
 export const AppRoutes = () => {
   return (
     <Routes>
@@ -172,6 +182,16 @@ export const AppRoutes = () => {
       <Route path="/organizer/analytics" element={<Analytics />} />
       <Route path="/organizer/profile" element={<OrganizerProfile />} />
       <Route path="/organizer/notifications" element={<OrganizerNotifications />} />
+
+      {/* Phase 6 Judge Module Routes */}
+      <Route path="/judge/dashboard" element={<JudgeDashboard />} />
+      <Route path="/judge/projects" element={<AssignedProjects />} />
+      <Route path="/judge/project/:id" element={<ProjectDetails />} />
+      <Route path="/judge/evaluate/:id" element={<ProjectEvaluation />} />
+      <Route path="/judge/history" element={<EvaluationHistory />} />
+      <Route path="/judge/analytics" element={<JudgeAnalytics />} />
+      <Route path="/judge/notifications" element={<JudgeNotifications />} />
+      <Route path="/judge/profile" element={<JudgeProfile />} />
 
       {/* Showcase & Dashboard Demo */}
       <Route
