@@ -24,6 +24,20 @@ import Profile from '../pages/Profile';
 import Settings from '../pages/Settings';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 
+// Phase 4 Participant Module pages
+import ParticipantDashboard from '../pages/Participant/Dashboard';
+import MyHackathons from '../pages/Participant/MyHackathons';
+import ParticipantHackathonDetails from '../pages/Participant/ParticipantHackathonDetails';
+import MyRegistrations from '../pages/Participant/MyRegistrations';
+import MyTeams from '../pages/Participant/MyTeams';
+import CreateTeam from '../pages/Participant/CreateTeam';
+import TeamDetails from '../pages/Participant/TeamDetails';
+import JoinTeam from '../pages/Participant/JoinTeam';
+import Submission from '../pages/Participant/Submission';
+import SubmissionHistory from '../pages/Participant/SubmissionHistory';
+import Notifications from '../pages/Participant/Notifications';
+import ParticipantProfile from '../pages/Participant/ParticipantProfile';
+
 export const AppRoutes = () => {
   return (
     <Routes>
@@ -114,6 +128,20 @@ export const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+      {/* Phase 4 Participant Module Routes */}
+      <Route path="/participant/dashboard" element={<ParticipantDashboard />} />
+      <Route path="/participant/hackathons" element={<MyHackathons />} />
+      <Route path="/participant/hackathons/:id" element={<ParticipantHackathonDetails />} />
+      <Route path="/participant/registrations" element={<MyRegistrations />} />
+      <Route path="/participant/teams" element={<MyTeams />} />
+      <Route path="/participant/team/create" element={<CreateTeam />} />
+      <Route path="/participant/team/join" element={<JoinTeam />} />
+      <Route path="/participant/team/:id" element={<TeamDetails />} />
+      <Route path="/participant/submission" element={<Submission />} />
+      <Route path="/participant/submissions" element={<SubmissionHistory />} />
+      <Route path="/participant/notifications" element={<Notifications />} />
+      <Route path="/participant/profile" element={<ParticipantProfile />} />
 
       {/* Showcase & Dashboard Demo */}
       <Route
