@@ -63,6 +63,22 @@ import JudgeAnalytics from '../pages/Judge/JudgeAnalytics';
 import JudgeNotifications from '../pages/Judge/JudgeNotifications';
 import JudgeProfile from '../pages/Judge/JudgeProfile';
 
+// Phase 7 Admin Module pages
+import AdminDashboard from '../pages/Admin/AdminDashboard';
+import ManageUsers from '../pages/Admin/ManageUsers';
+import UserDetails from '../pages/Admin/UserDetails';
+import ManageOrganizers from '../pages/Admin/ManageOrganizers';
+import ManageJudges from '../pages/Admin/ManageJudges';
+import ManageHackathons from '../pages/Admin/ManageHackathons';
+import AdminManageTeams from '../pages/Admin/ManageTeams';
+import AdminManageSubmissions from '../pages/Admin/ManageSubmissions';
+import AdminReports from '../pages/Admin/Reports';
+import AdminAnalytics from '../pages/Admin/Analytics';
+import ActivityLogs from '../pages/Admin/ActivityLogs';
+import SystemSettings from '../pages/Admin/SystemSettings';
+import AdminNotifications from '../pages/Admin/Notifications';
+import AdminProfile from '../pages/Admin/Profile';
+
 export const AppRoutes = () => {
   return (
     <Routes>
@@ -192,6 +208,22 @@ export const AppRoutes = () => {
       <Route path="/judge/analytics" element={<JudgeAnalytics />} />
       <Route path="/judge/notifications" element={<JudgeNotifications />} />
       <Route path="/judge/profile" element={<JudgeProfile />} />
+
+      {/* Phase 7 Admin Module Routes */}
+      <Route path="/admin/dashboard" element={<AdminDashboard />} />
+      <Route path="/admin/users" element={<ManageUsers />} />
+      <Route path="/admin/users/:id" element={<UserDetails />} />
+      <Route path="/admin/organizers" element={<ManageOrganizers />} />
+      <Route path="/admin/judges" element={<ManageJudges />} />
+      <Route path="/admin/hackathons" element={<ManageHackathons />} />
+      <Route path="/admin/teams" element={<AdminManageTeams />} />
+      <Route path="/admin/submissions" element={<AdminManageSubmissions />} />
+      <Route path="/admin/reports" element={<AdminReports />} />
+      <Route path="/admin/analytics" element={<AdminAnalytics />} />
+      <Route path="/admin/activity" element={<ActivityLogs />} />
+      <Route path="/admin/settings" element={<SystemSettings />} />
+      <Route path="/admin/notifications" element={<AdminNotifications />} />
+      <Route path="/admin/profile" element={<AdminProfile />} />
 
       {/* Showcase & Dashboard Demo */}
       <Route

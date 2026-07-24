@@ -1,0 +1,42 @@
+export const adminReportsList = [
+  {
+    id: 'rep001',
+    name: 'User Registration Summary',
+    description: 'Detailed analysis of user signups, active accounts, blocked users, and roles breakdown.',
+    type: 'User Report',
+    lastGenerated: '2026-07-24T10:00:00Z',
+    records: 4820,
+  },
+  {
+    id: 'rep002',
+    name: 'Hackathon Performance Index',
+    description: 'Compilation of registrations, teams, submission rates, and participant engagement by hackathon.',
+    type: 'Hackathon Report',
+    lastGenerated: '2026-07-24T09:30:00Z',
+    records: 6,
+  },
+  {
+    id: 'rep003',
+    name: 'Submission & Evaluations Audit',
+    description: 'Detailed list of project submissions, evaluation scores, judge assignments, and status counts.',
+    type: 'Submission Report',
+    lastGenerated: '2026-07-23T18:00:00Z',
+    records: 6,
+  },
+  {
+    id: 'rep004',
+    name: 'Judge Evaluation Summary',
+    description: 'Analysis of judge activity, assigned projects, completed reviews, and average rating scores.',
+    type: 'Judge Performance',
+    lastGenerated: '2026-07-24T08:15:00Z',
+    records: 5,
+  },
+  {
+    id: 'rep005',
+    name: 'Organizer Activity Report',
+    description: 'Total hackathons created, cumulative participant count, and active status per organizer.',
+    type: 'Organizer Performance',
+    lastGenerated: '2026-07-24T10:15:00Z',
+    records: 5,
+  },
+];
