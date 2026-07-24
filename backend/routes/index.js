@@ -1,9 +1,17 @@
 const express = require('express');
 const healthRouter = require('./health');
+const authRouter = require('./authRoutes');
 
 const router = express.Router();
 
-// Register v1 sub-routes here
-router.use('/', healthRouter); // Registers /health under /api/v1/health
+// =====================================================
+// API v1 Route Registry
+// =====================================================
+
+// Health check endpoint
+router.use('/', healthRouter);
+
+// Authentication endpoints
+router.use('/auth', authRouter);
 
 module.exports = router;

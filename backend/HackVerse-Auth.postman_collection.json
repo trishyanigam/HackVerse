@@ -1,0 +1,152 @@
+{
+  "info": {
+    "name": "HackVerse Auth API",
+    "description": "Authentication endpoints for HackVerse Platform - Phase 9",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "BASE_URL", "value": "http://localhost:5000/api/v1" },
+    { "key": "ACCESS_TOKEN", "value": "" },
+    { "key": "REFRESH_TOKEN", "value": "" },
+    { "key": "RESET_TOKEN", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": "{{BASE_URL}}/health",
+        "description": "Verify API service is running"
+      }
+    },
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "url": "{{BASE_URL}}/auth/register",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fullName\": \"Aryan Sharma\",\n  \"email\": \"aryan@example.com\",\n  \"password\": \"Password1\",\n  \"role\": \"PARTICIPANT\"\n}"
+        },
+        "description": "Creates a new user account and returns access + refresh tokens"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json.data && json.data.accessToken) {",
+              "  pm.collectionVariables.set('ACCESS_TOKEN', json.data.accessToken);",
+              "  pm.collectionVariables.set('REFRESH_TOKEN', json.data.refreshToken);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "url": "{{BASE_URL}}/auth/login",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"aryan@example.com\",\n  \"password\": \"Password1\"\n}"
+        },
+        "description": "Authenticates user and returns new session tokens"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json.data && json.data.accessToken) {",
+              "  pm.collectionVariables.set('ACCESS_TOKEN', json.data.accessToken);",
+              "  pm.collectionVariables.set('REFRESH_TOKEN', json.data.refreshToken);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get My Profile (Protected)",
+      "request": {
+        "method": "GET",
+        "url": "{{BASE_URL}}/auth/me",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}" }
+        ],
+        "description": "Returns currently authenticated user profile. Requires valid Bearer token."
+      }
+    },
+    {
+      "name": "Refresh Token",
+      "request": {
+        "method": "POST",
+        "url": "{{BASE_URL}}/auth/refresh-token",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"refreshToken\": \"{{REFRESH_TOKEN}}\"\n}"
+        },
+        "description": "Generates a new access token using the refresh token"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json.data && json.data.accessToken) {",
+              "  pm.collectionVariables.set('ACCESS_TOKEN', json.data.accessToken);",
+              "  pm.collectionVariables.set('REFRESH_TOKEN', json.data.refreshToken);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Forgot Password",
+      "request": {
+        "method": "POST",
+        "url": "{{BASE_URL}}/auth/forgot-password",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"aryan@example.com\"\n}"
+        },
+        "description": "Triggers password reset flow. Reset token is logged to server console in dev mode."
+      }
+    },
+    {
+      "name": "Reset Password",
+      "request": {
+        "method": "POST",
+        "url": "{{BASE_URL}}/auth/reset-password",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"token\": \"{{RESET_TOKEN}}\",\n  \"newPassword\": \"NewPassword1\"\n}"
+        },
+        "description": "Resets user password. Copy raw token from server console after forgot-password request."
+      }
+    },
+    {
+      "name": "Logout (Protected)",
+      "request": {
+        "method": "POST",
+        "url": "{{BASE_URL}}/auth/logout",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{ACCESS_TOKEN}}" }
+        ],
+        "description": "Clears refresh token from DB and HTTP-only cookies."
+      }
+    }
+  ]
+}
