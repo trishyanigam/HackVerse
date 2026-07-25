@@ -4,6 +4,7 @@ const authRouter = require('./authRoutes');
 const hackathonRouter = require('./hackathonRoutes');
 const registrationRouter = require('./registrationRoutes');
 const teamRouter = require('./teamRoutes');
+const submissionRouter = require('./submissionRoutes');
 
 const router = express.Router();
 
@@ -25,5 +26,8 @@ router.use('/registrations', registrationRouter);
 
 // Team management endpoints
 router.use('/teams', teamRouter);
+
+// Submission management endpoints
+router.use('/submissions', submissionRouter);
 
 module.exports = router;
