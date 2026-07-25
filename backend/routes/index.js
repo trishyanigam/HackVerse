@@ -7,6 +7,9 @@ const teamRouter = require('./teamRoutes');
 const submissionRouter = require('./submissionRoutes');
 const reviewRouter = require('./reviewRoutes');
 const leaderboardRouter = require('./leaderboardRoutes');
+const notificationRouter = require('./notificationRoutes');
+const reportRouter = require('./reportRoutes');
+const certificateRouter = require('./certificateRoutes');
 
 const router = express.Router();
 
@@ -37,5 +40,14 @@ router.use('/reviews', reviewRouter);
 
 // Leaderboard endpoints
 router.use('/leaderboard', leaderboardRouter);
+
+// Notification endpoints
+router.use('/notifications', notificationRouter);
+
+// Report & Analytics endpoints
+router.use('/reports', reportRouter);
+
+// Certificate endpoints
+router.use('/certificates', certificateRouter);
 
 module.exports = router;

@@ -11,7 +11,11 @@ const startServer = async () => {
     // 1. Establish database connections
     await connectDB();
 
-    // 2. Start listening to port requests
+    // 2. Initialize node-cron background schedulers
+    const { initSchedulers } = require('./services/schedulerService');
+    initSchedulers();
+
+    // 3. Start listening to port requests
     app.listen(PORT, () => {
       logger.info(`HackVerse Backend Server listening on port: ${PORT}`);
       logger.info(`Environment mode: ${process.env.NODE_ENV}`);
