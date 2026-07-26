@@ -2,8 +2,8 @@
 
 export const participantUser = {
   id: 'u001',
-  name: 'Aryan Sharma',
-  email: 'aryan.sharma@college.edu',
+  name: 'Trishya Nigam',
+  email: 'trishya@hackverse.io',
   avatar: null,
   college: 'IIT Delhi',
   branch: 'Computer Science & Engineering',
@@ -12,12 +12,12 @@ export const participantUser = {
   bio: 'Passionate full-stack developer and AI enthusiast. Love building products that solve real-world problems.',
   skills: ['React', 'Node.js', 'Python', 'Machine Learning', 'MongoDB', 'Docker'],
   socialLinks: {
-    github: 'https://github.com/aryan-sharma',
-    linkedin: 'https://linkedin.com/in/aryan-sharma',
-    twitter: 'https://twitter.com/aryan_dev',
-    portfolio: 'https://aryan.dev',
+    github: 'https://github.com',
+    linkedin: 'https://linkedin.com',
+    twitter: 'https://twitter.com',
+    portfolio: 'https://portfolio.dev',
   },
-  joinedDate: '2024-01-15',
+  joinedDate: '2026-01-15',
   hackathonsWon: 2,
   totalPoints: 4850,
   rank: 12,
@@ -65,23 +65,23 @@ export const dashboardStats = [
 export const upcomingDeadlines = [
   {
     id: 'dl1',
-    hackathon: 'CodeSprint 2025',
+    hackathon: 'CodeSprint 2026',
     type: 'Submission Deadline',
-    dueDate: '2025-08-10T23:59:00',
+    dueDate: '2026-08-10T23:59:00',
     urgency: 'high',
   },
   {
     id: 'dl2',
     hackathon: 'AI Builder Fest',
     type: 'Registration Closes',
-    dueDate: '2025-08-15T23:59:00',
+    dueDate: '2026-08-15T23:59:00',
     urgency: 'medium',
   },
   {
     id: 'dl3',
     hackathon: 'Web3 Innovate',
     type: 'Team Formation',
-    dueDate: '2025-08-20T23:59:00',
+    dueDate: '2026-08-20T23:59:00',
     urgency: 'low',
   },
 ];

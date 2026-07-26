@@ -21,6 +21,7 @@ import {
   FiChevronRight,
   FiZap,
 } from 'react-icons/fi';
+import { useAuth } from '../context/AuthContext';
 
 const navItems = [
   { label: 'Dashboard', icon: FiGrid, path: '/admin/dashboard' },
@@ -41,6 +42,12 @@ const navItems = [
 const SidebarContent = ({ onClose }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { logout, user } = useAuth();
+
+  const handleSignOut = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <div className="flex flex-col h-full bg-[#0b0b14]">
@@ -60,10 +67,11 @@ const SidebarContent = ({ onClose }) => {
       </div>
 
       {/* Role Badge */}
-      <div className="px-5 py-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-purple-400 bg-purple-500/10 border border-purple-500/20 rounded-full px-3 py-1">
+      <div className="px-5 py-3 space-y-1">
+        <span className="text-xs font-bold uppercase tracking-wider text-purple-400 bg-purple-500/10 border border-purple-500/20 rounded-full px-3 py-1 inline-block">
           Super Admin
         </span>
+        {user?.name && <p className="text-xs text-slate-300 font-medium truncate pt-1">{user.name}</p>}
       </div>
 
       {/* Navigation */}
@@ -97,7 +105,7 @@ const SidebarContent = ({ onClose }) => {
       {/* Bottom Actions */}
       <div className="p-3 border-t border-white/10 space-y-1">
         <button
-          onClick={() => navigate('/login')}
+          onClick={handleSignOut}
           className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-slate-400 hover:text-red-400 hover:bg-red-500/5 transition-all"
         >
           <FiLogOut size={17} />
@@ -111,8 +119,14 @@ const SidebarContent = ({ onClose }) => {
 const AdminLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
 
   const currentPage = navItems.find((n) => location.pathname === n.path || (n.path !== '/admin/dashboard' && location.pathname.startsWith(n.path)))?.label || 'Admin';
+
+  const userInitials = (user?.name
+    ? user.name.split(' ').map((n) => n[0]).join('').slice(0, 2)
+    : user?.email ? user.email.slice(0, 2) : 'AD'
+  ).toUpperCase();
 
   return (
     <div className="min-h-screen bg-[#07070d] text-slate-100 flex font-sans">
@@ -166,7 +180,7 @@ const AdminLayout = ({ children }) => {
             </div>
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-purple-500/10">
-                AD
+                {userInitials}
               </div>
             </div>
           </div>

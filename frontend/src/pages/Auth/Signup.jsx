@@ -16,9 +16,11 @@ import RememberMeCheckbox from '../../components/auth/RememberMeCheckbox';
 import FormFooter from '../../components/auth/FormFooter';
 import Button from '../../components/ui/Button';
 import { signupSchema } from '../../utils/authSchemas';
+import { useAuth } from '../../context/AuthContext';
 
 export const Signup = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const {
     register,
@@ -37,14 +39,29 @@ export const Signup = () => {
     },
   });
 
-  // Watch password field to update real-time password strength meter
   const watchedPassword = useWatch({ control, name: 'password', defaultValue: '' });
 
+  const getRoleDashboardRoute = (role) => {
+    switch (role?.toLowerCase()) {
+      case 'admin':
+        return '/admin/dashboard';
+      case 'organizer':
+        return '/organizer/dashboard';
+      case 'judge':
+        return '/judge/dashboard';
+      case 'participant':
+      default:
+        return '/participant/dashboard';
+    }
+  };
+
   const onSubmit = (data) => {
+    login({ name: data.name, email: data.email, role: data.role || 'participant' });
     toast.success(`Account created successfully for ${data.name}!`);
+    const targetRoute = getRoleDashboardRoute(data.role);
     setTimeout(() => {
-      navigate('/choose-role');
-    }, 1000);
+      navigate(targetRoute);
+    }, 800);
   };
 
   return (
@@ -55,7 +72,6 @@ export const Signup = () => {
         className="max-w-lg"
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Full Name */}
           <InputField
             label="Full Name"
             id="name"
@@ -66,21 +82,18 @@ export const Signup = () => {
             required
           />
 
-          {/* Email Address */}
           <EmailField
             {...register('email')}
             error={errors.email?.message}
             required
           />
 
-          {/* Role Selection */}
           <RoleSelector
             {...register('role')}
             error={errors.role?.message}
             required
           />
 
-          {/* Password */}
           <div className="space-y-1">
             <PasswordField
               label="Password"
@@ -92,7 +105,6 @@ export const Signup = () => {
             <PasswordStrength password={watchedPassword} />
           </div>
 
-          {/* Confirm Password */}
           <PasswordField
             label="Confirm Password"
             id="confirmPassword"
@@ -102,7 +114,6 @@ export const Signup = () => {
             required
           />
 
-          {/* Terms & Conditions Checkbox */}
           <RememberMeCheckbox
             id="terms"
             label="I agree to the HackVerse Terms of Service & Privacy Policy"
@@ -110,7 +121,6 @@ export const Signup = () => {
             error={errors.terms?.message}
           />
 
-          {/* Submit Button */}
           <Button
             type="submit"
             variant="primary"

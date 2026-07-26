@@ -7,7 +7,7 @@ export const organizerStats = [
 
 export const recentRegistrations = [
   { id: 'reg1', teamName: 'ApexCreators', leader: 'Kabir Dev', members: 4, date: '2026-07-24T09:12:00', hackathon: 'NeuralFlow: Generative AI Sprint', status: 'pending' },
-  { id: 'reg2', teamName: 'ByteBuilders', leader: 'Aryan Sharma', members: 3, date: '2026-07-23T14:30:00', hackathon: 'NeuralFlow: Generative AI Sprint', status: 'approved' },
+  { id: 'reg2', teamName: 'ByteBuilders', leader: 'Trishya Nigam', members: 3, date: '2026-07-23T14:30:00', hackathon: 'NeuralFlow: Generative AI Sprint', status: 'approved' },
   { id: 'reg3', teamName: 'Skyline Devs', leader: 'Sarah Khan', members: 2, date: '2026-07-23T11:15:00', hackathon: 'FitTrack IoT: Smart Wearables', status: 'approved' },
   { id: 'reg4', teamName: 'QuantumCoders', leader: 'Amit Patel', members: 4, date: '2026-07-22T17:45:00', hackathon: 'EtherWallet: Smart Contract Sprint', status: 'pending' },
   { id: 'reg5', teamName: 'Web3 Wizards', leader: 'John Doe', members: 1, date: '2026-07-22T10:00:00', hackathon: 'EtherWallet: Smart Contract Sprint', status: 'rejected' },

@@ -16,6 +16,7 @@ import {
   FiSettings,
   FiZap,
 } from 'react-icons/fi';
+import { useAuth } from '../context/AuthContext';
 
 const navItems = [
   { label: 'Dashboard', icon: FiGrid, path: '/participant/dashboard' },
@@ -30,6 +31,12 @@ const navItems = [
 const SidebarContent = ({ onClose }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { logout, user } = useAuth();
+
+  const handleSignOut = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -48,11 +55,12 @@ const SidebarContent = ({ onClose }) => {
         )}
       </div>
 
-      {/* Role Badge */}
-      <div className="px-5 py-3">
-        <span className="text-xs font-semibold uppercase tracking-wider text-purple-400 bg-purple-500/10 border border-purple-500/20 rounded-full px-3 py-1">
+      {/* Role Badge & User name */}
+      <div className="px-5 py-3 space-y-1">
+        <span className="text-xs font-semibold uppercase tracking-wider text-purple-400 bg-purple-500/10 border border-purple-500/20 rounded-full px-3 py-1 inline-block">
           Participant
         </span>
+        {user?.name && <p className="text-xs text-slate-300 font-medium truncate pt-1">{user.name}</p>}
       </div>
 
       {/* Navigation */}
@@ -98,7 +106,7 @@ const SidebarContent = ({ onClose }) => {
           <span>Settings</span>
         </button>
         <button
-          onClick={() => navigate('/login')}
+          onClick={handleSignOut}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-slate-400 hover:text-red-400 hover:bg-red-500/5 transition-all"
         >
           <FiLogOut size={18} />
@@ -113,8 +121,14 @@ const ParticipantLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const currentPage = navItems.find((n) => n.path === location.pathname)?.label || 'Participant';
+
+  const userInitials = (user?.name
+    ? user.name.split(' ').map((n) => n[0]).join('').slice(0, 2)
+    : user?.email ? user.email.slice(0, 2) : 'PA'
+  ).toUpperCase();
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-slate-100 flex">
@@ -168,7 +182,6 @@ const ParticipantLayout = ({ children }) => {
             </div>
 
             <div className="flex items-center gap-3">
-              {/* Notification Bell */}
               <button
                 onClick={() => navigate('/participant/notifications')}
                 className="relative p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-all"
@@ -177,12 +190,11 @@ const ParticipantLayout = ({ children }) => {
                 <span className="absolute top-1 right-1 w-2 h-2 bg-purple-500 rounded-full" />
               </button>
 
-              {/* Avatar */}
               <button
                 onClick={() => navigate('/participant/profile')}
                 className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-semibold text-sm hover:opacity-90 transition-opacity"
               >
-                AS
+                {userInitials}
               </button>
             </div>
           </div>
@@ -202,7 +214,7 @@ const ParticipantLayout = ({ children }) => {
 
         {/* Footer */}
         <footer className="border-t border-white/5 px-6 py-4 text-center text-xs text-slate-600">
-          © 2025 HackVerse · Participant Portal · Built with ❤️
+          © 2026 HackVerse · Participant Portal
         </footer>
       </div>
     </div>

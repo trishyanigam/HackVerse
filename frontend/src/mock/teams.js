@@ -12,7 +12,7 @@ export const myTeams = [
     members: [
       {
         id: 'u001',
-        name: 'Aryan Sharma',
+        name: 'Trishya Nigam',
         email: 'aryan@college.edu',
         role: 'Leader',
         avatar: null,
@@ -75,7 +75,7 @@ export const myTeams = [
       },
       {
         id: 'u001',
-        name: 'Aryan Sharma',
+        name: 'Trishya Nigam',
         email: 'aryan@college.edu',
         role: 'Data Engineer',
         avatar: null,

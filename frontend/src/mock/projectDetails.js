@@ -5,7 +5,7 @@ export const mockProjectDetails = {
     teamName: 'ByteBuilders',
     hackathonName: 'CodeSprint 2025',
     members: [
-      { name: 'Aryan Sharma', role: 'Leader / Fullstack' },
+      { name: 'Trishya Nigam', role: 'Leader / Fullstack' },
       { name: 'Priya Gupta', role: 'Frontend Designer' },
       { name: 'Rohan Verma', role: 'Backend / IoT Dev' }
     ],

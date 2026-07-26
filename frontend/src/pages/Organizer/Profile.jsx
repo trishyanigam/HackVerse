@@ -6,21 +6,7 @@ import {
 } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-
-const mockProfile = {
-  name: 'Sophia Reynolds',
-  organization: 'TechInnovators Hack Labs',
-  email: 'sophia@techinnovators.org',
-  phone: '+91 98765 43210',
-  location: 'Bangalore, India',
-  bio: 'Sophia is a tech community architect with 8+ years of experience directing hackathons and innovation incubation hubs. She has launched over 25 successful hack events globally.',
-  socialLinks: {
-    github: 'https://github.com/sophia-codes',
-    linkedin: 'https://linkedin.com/in/sophia-reynolds',
-    twitter: 'https://twitter.com/sophia_dev',
-    portfolio: 'https://sophia.io'
-  }
-};
+import { useAuth } from '../../context/AuthContext';
 
 const socialIconMap = {
   github: FiGithub,
@@ -30,9 +16,25 @@ const socialIconMap = {
 };
 
 const OrganizerProfile = () => {
-  const [profile, setProfile] = useState(mockProfile);
+  const { user: authUser } = useAuth();
+
+  const [profile, setProfile] = useState({
+    name: authUser?.name || authUser?.email?.split('@')[0] || 'Organizer',
+    organization: 'TechInnovators Hack Labs',
+    email: authUser?.email || 'organizer@techinnovators.org',
+    phone: '+91 98765 43210',
+    location: 'Bangalore, India',
+    bio: 'Tech community architect with experience directing hackathons and innovation incubation hubs.',
+    socialLinks: {
+      github: 'https://github.com',
+      linkedin: 'https://linkedin.com',
+      twitter: 'https://twitter.com',
+      portfolio: 'https://hackverse.io'
+    }
+  });
+
   const [editOpen, setEditOpen] = useState(false);
-  const [form, setForm] = useState({ ...mockProfile });
+  const [form, setForm] = useState({ ...profile });
 
   const handleSave = () => {
     setProfile({ ...form });
@@ -40,16 +42,23 @@ const OrganizerProfile = () => {
     setEditOpen(false);
   };
 
+  const userInitials = (profile.name
+    ? profile.name.split(' ').map((n) => n[0]).join('').slice(0, 2)
+    : 'OR'
+  ).toUpperCase();
+
   return (
     <OrganizerLayout>
-      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-xl font-bold text-white">Organizer Profile</h2>
           <p className="text-sm text-slate-500">Manage your organizer profile, contact details, and organization meta</p>
         </div>
         <button
-          onClick={() => setEditOpen(true)}
+          onClick={() => {
+            setForm({ ...profile });
+            setEditOpen(true);
+          }}
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-purple-500 to-blue-500 hover:opacity-90 transition-all"
         >
           <FiEdit2 size={14} />
@@ -58,15 +67,14 @@ const OrganizerProfile = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Card: Summary & Avatar */}
         <div className="space-y-6">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-[#111118] border border-white/5 rounded-2xl p-6 text-center"
           >
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-2xl mx-auto mb-4">
-              {profile.name.slice(0, 2).toUpperCase()}
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-2xl mx-auto mb-4 shadow-lg">
+              {userInitials}
             </div>
             <h3 className="text-lg font-bold text-white">{profile.name}</h3>
             <p className="text-sm text-purple-400 mt-1 flex items-center justify-center gap-1.5 font-medium">
@@ -79,14 +87,13 @@ const OrganizerProfile = () => {
             </p>
           </motion.div>
 
-          {/* Social Links */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             className="bg-[#111118] border border-white/5 rounded-2xl p-5"
           >
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 text-slate-400">Social Connections</h4>
+            <h4 className="text-xs font-bold uppercase tracking-wider mb-4 text-slate-400">Social Connections</h4>
             <div className="space-y-3">
               {Object.entries(profile.socialLinks).map(([key, url]) => {
                 const Icon = socialIconMap[key] || FiGlobe;
@@ -107,7 +114,6 @@ const OrganizerProfile = () => {
           </motion.div>
         </div>
 
-        {/* Right Card: Bio & Details info */}
         <div className="lg:col-span-2 space-y-6">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -144,7 +150,6 @@ const OrganizerProfile = () => {
         </div>
       </div>
 
-      {/* Edit Modal */}
       {editOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setEditOpen(false)} />

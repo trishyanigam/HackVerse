@@ -6,7 +6,7 @@ import {
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import ParticipantLayout from '../../layouts/ParticipantLayout';
-import { participantUser } from '../../mock/participantDashboard';
+import { useAuth } from '../../context/AuthContext';
 
 const socialIconMap = {
   github: FiGithub,
@@ -16,15 +16,41 @@ const socialIconMap = {
 };
 
 const ParticipantProfile = () => {
+  const { user: authUser } = useAuth();
   const [editOpen, setEditOpen] = useState(false);
-  const [user, setUser] = useState(participantUser);
-  const [form, setForm] = useState({ ...participantUser });
+
+  const [user, setUser] = useState({
+    name: authUser?.name || authUser?.email?.split('@')[0] || 'Participant',
+    email: authUser?.email || 'participant@hackverse.io',
+    role: (authUser?.role || 'Participant').toUpperCase(),
+    college: 'IIT Delhi',
+    branch: 'Computer Science & Engineering',
+    year: '3rd Year',
+    hackathonsWon: 2,
+    totalPoints: 4850,
+    rank: 12,
+    bio: 'Passionate full-stack developer and AI enthusiast. Love building products that solve real-world problems.',
+    skills: ['React', 'Node.js', 'Python', 'Machine Learning', 'MongoDB', 'Docker'],
+    socialLinks: {
+      github: 'https://github.com',
+      linkedin: 'https://linkedin.com',
+      twitter: 'https://twitter.com',
+      portfolio: 'https://portfolio.dev',
+    },
+  });
+
+  const [form, setForm] = useState({ ...user });
 
   const handleSave = () => {
     setUser({ ...form });
     toast.success('Profile updated successfully!');
     setEditOpen(false);
   };
+
+  const userInitials = (user.name
+    ? user.name.split(' ').map((n) => n[0]).join('').slice(0, 2)
+    : 'PA'
+  ).toUpperCase();
 
   return (
     <ParticipantLayout>
@@ -34,7 +60,10 @@ const ParticipantProfile = () => {
           <p className="text-sm text-slate-500">Manage your public profile and information</p>
         </div>
         <button
-          onClick={() => setEditOpen(true)}
+          onClick={() => {
+            setForm({ ...user });
+            setEditOpen(true);
+          }}
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-purple-500 to-blue-500 hover:opacity-90 transition-all"
         >
           <FiEdit2 size={14} />
@@ -51,8 +80,8 @@ const ParticipantProfile = () => {
             animate={{ opacity: 1, y: 0 }}
             className="bg-[#111118] border border-white/5 rounded-2xl p-6 text-center"
           >
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-2xl mx-auto mb-4">
-              {user.name.slice(0, 2).toUpperCase()}
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-2xl mx-auto mb-4 shadow-lg">
+              {userInitials}
             </div>
             <h3 className="text-lg font-bold text-white">{user.name}</h3>
             <p className="text-sm text-purple-400 mt-1">{user.role}</p>

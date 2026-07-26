@@ -82,15 +82,7 @@ import AdminProfile from '../pages/Admin/Profile';
 export const AppRoutes = () => {
   return (
     <Routes>
-      {/* Auth Pages (Unwrapped from public layout for clean auth card focus) */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/verify-email" element={<VerifyEmail />} />
-      <Route path="/choose-role" element={<ChooseRole />} />
-
-      {/* Public Pages wrapped in PublicLayout */}
+      {/* 1. PUBLIC LANDING PAGE (Unrestricted Access) */}
       <Route
         path="/"
         element={
@@ -99,56 +91,76 @@ export const AppRoutes = () => {
           </PublicLayout>
         }
       />
+
+      {/* 2. AUTHENTICATION PAGES (Unrestricted Access for Sign In / Sign Up) */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
+      <Route path="/choose-role" element={<ChooseRole />} />
+
+      {/* 3. ALL OTHER PAGES ARE STRICTLY PROTECTED (Redirect to /login if not authenticated) */}
       <Route
         path="/about"
         element={
-          <PublicLayout>
-            <About />
-          </PublicLayout>
+          <ProtectedRoute>
+            <PublicLayout>
+              <About />
+            </PublicLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/contact"
         element={
-          <PublicLayout>
-            <Contact />
-          </PublicLayout>
+          <ProtectedRoute>
+            <PublicLayout>
+              <Contact />
+            </PublicLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/hackathons"
         element={
-          <PublicLayout>
-            <Hackathons />
-          </PublicLayout>
+          <ProtectedRoute>
+            <PublicLayout>
+              <Hackathons />
+            </PublicLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/hackathons/:id"
         element={
-          <PublicLayout>
-            <HackathonDetails />
-          </PublicLayout>
+          <ProtectedRoute>
+            <PublicLayout>
+              <HackathonDetails />
+            </PublicLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/leaderboard"
         element={
-          <PublicLayout>
-            <Leaderboard />
-          </PublicLayout>
+          <ProtectedRoute>
+            <PublicLayout>
+              <Leaderboard />
+            </PublicLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/faq"
         element={
-          <PublicLayout>
-            <FAQ />
-          </PublicLayout>
+          <ProtectedRoute>
+            <PublicLayout>
+              <FAQ />
+            </PublicLayout>
+          </ProtectedRoute>
         }
       />
-
-      {/* Protected Routes (Wrapped in ProtectedRoute & PublicLayout) */}
       <Route
         path="/profile"
         element={
@@ -170,86 +182,92 @@ export const AppRoutes = () => {
         }
       />
 
-      {/* Phase 4 Participant Module Routes */}
-      <Route path="/participant/dashboard" element={<ParticipantDashboard />} />
-      <Route path="/participant/hackathons" element={<MyHackathons />} />
-      <Route path="/participant/hackathons/:id" element={<ParticipantHackathonDetails />} />
-      <Route path="/participant/registrations" element={<MyRegistrations />} />
-      <Route path="/participant/teams" element={<MyTeams />} />
-      <Route path="/participant/team/create" element={<CreateTeam />} />
-      <Route path="/participant/team/join" element={<JoinTeam />} />
-      <Route path="/participant/team/:id" element={<TeamDetails />} />
-      <Route path="/participant/submission" element={<Submission />} />
-      <Route path="/participant/submissions" element={<SubmissionHistory />} />
-      <Route path="/participant/notifications" element={<Notifications />} />
-      <Route path="/participant/profile" element={<ParticipantProfile />} />
+      {/* Phase 4 Participant Module Routes (Protected) */}
+      <Route path="/participant/dashboard" element={<ProtectedRoute><ParticipantDashboard /></ProtectedRoute>} />
+      <Route path="/participant/hackathons" element={<ProtectedRoute><MyHackathons /></ProtectedRoute>} />
+      <Route path="/participant/hackathons/:id" element={<ProtectedRoute><ParticipantHackathonDetails /></ProtectedRoute>} />
+      <Route path="/participant/registrations" element={<ProtectedRoute><MyRegistrations /></ProtectedRoute>} />
+      <Route path="/participant/teams" element={<ProtectedRoute><MyTeams /></ProtectedRoute>} />
+      <Route path="/participant/team/create" element={<ProtectedRoute><CreateTeam /></ProtectedRoute>} />
+      <Route path="/participant/team/join" element={<ProtectedRoute><JoinTeam /></ProtectedRoute>} />
+      <Route path="/participant/team/:id" element={<ProtectedRoute><TeamDetails /></ProtectedRoute>} />
+      <Route path="/participant/submission" element={<ProtectedRoute><Submission /></ProtectedRoute>} />
+      <Route path="/participant/submissions" element={<ProtectedRoute><SubmissionHistory /></ProtectedRoute>} />
+      <Route path="/participant/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+      <Route path="/participant/profile" element={<ProtectedRoute><ParticipantProfile /></ProtectedRoute>} />
 
-      {/* Phase 5 Organizer Module Routes */}
-      <Route path="/organizer/dashboard" element={<OrganizerDashboard />} />
-      <Route path="/organizer/hackathons" element={<OrganizerHackathons />} />
-      <Route path="/organizer/hackathon/create" element={<CreateHackathon />} />
-      <Route path="/organizer/hackathon/edit/:id" element={<EditHackathon />} />
-      <Route path="/organizer/hackathon/:id" element={<ViewHackathon />} />
-      <Route path="/organizer/registrations" element={<ManageRegistrations />} />
-      <Route path="/organizer/teams" element={<ManageTeams />} />
-      <Route path="/organizer/judges" element={<AssignJudges />} />
-      <Route path="/organizer/submissions" element={<ManageSubmissions />} />
-      <Route path="/organizer/results" element={<Results />} />
-      <Route path="/organizer/analytics" element={<Analytics />} />
-      <Route path="/organizer/profile" element={<OrganizerProfile />} />
-      <Route path="/organizer/notifications" element={<OrganizerNotifications />} />
+      {/* Phase 5 Organizer Module Routes (Protected) */}
+      <Route path="/organizer/dashboard" element={<ProtectedRoute><OrganizerDashboard /></ProtectedRoute>} />
+      <Route path="/organizer/hackathons" element={<ProtectedRoute><OrganizerHackathons /></ProtectedRoute>} />
+      <Route path="/organizer/hackathon/create" element={<ProtectedRoute><CreateHackathon /></ProtectedRoute>} />
+      <Route path="/organizer/hackathon/edit/:id" element={<ProtectedRoute><EditHackathon /></ProtectedRoute>} />
+      <Route path="/organizer/hackathon/:id" element={<ProtectedRoute><ViewHackathon /></ProtectedRoute>} />
+      <Route path="/organizer/registrations" element={<ProtectedRoute><ManageRegistrations /></ProtectedRoute>} />
+      <Route path="/organizer/teams" element={<ProtectedRoute><ManageTeams /></ProtectedRoute>} />
+      <Route path="/organizer/judges" element={<ProtectedRoute><AssignJudges /></ProtectedRoute>} />
+      <Route path="/organizer/submissions" element={<ProtectedRoute><ManageSubmissions /></ProtectedRoute>} />
+      <Route path="/organizer/results" element={<ProtectedRoute><Results /></ProtectedRoute>} />
+      <Route path="/organizer/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+      <Route path="/organizer/profile" element={<ProtectedRoute><OrganizerProfile /></ProtectedRoute>} />
+      <Route path="/organizer/notifications" element={<ProtectedRoute><OrganizerNotifications /></ProtectedRoute>} />
 
-      {/* Phase 6 Judge Module Routes */}
-      <Route path="/judge/dashboard" element={<JudgeDashboard />} />
-      <Route path="/judge/projects" element={<AssignedProjects />} />
-      <Route path="/judge/project/:id" element={<ProjectDetails />} />
-      <Route path="/judge/evaluate/:id" element={<ProjectEvaluation />} />
-      <Route path="/judge/history" element={<EvaluationHistory />} />
-      <Route path="/judge/analytics" element={<JudgeAnalytics />} />
-      <Route path="/judge/notifications" element={<JudgeNotifications />} />
-      <Route path="/judge/profile" element={<JudgeProfile />} />
+      {/* Phase 6 Judge Module Routes (Protected) */}
+      <Route path="/judge/dashboard" element={<ProtectedRoute><JudgeDashboard /></ProtectedRoute>} />
+      <Route path="/judge/projects" element={<ProtectedRoute><AssignedProjects /></ProtectedRoute>} />
+      <Route path="/judge/project/:id" element={<ProtectedRoute><ProjectDetails /></ProtectedRoute>} />
+      <Route path="/judge/evaluate/:id" element={<ProtectedRoute><ProjectEvaluation /></ProtectedRoute>} />
+      <Route path="/judge/history" element={<ProtectedRoute><EvaluationHistory /></ProtectedRoute>} />
+      <Route path="/judge/analytics" element={<ProtectedRoute><JudgeAnalytics /></ProtectedRoute>} />
+      <Route path="/judge/notifications" element={<ProtectedRoute><JudgeNotifications /></ProtectedRoute>} />
+      <Route path="/judge/profile" element={<ProtectedRoute><JudgeProfile /></ProtectedRoute>} />
 
-      {/* Phase 7 Admin Module Routes */}
-      <Route path="/admin/dashboard" element={<AdminDashboard />} />
-      <Route path="/admin/users" element={<ManageUsers />} />
-      <Route path="/admin/users/:id" element={<UserDetails />} />
-      <Route path="/admin/organizers" element={<ManageOrganizers />} />
-      <Route path="/admin/judges" element={<ManageJudges />} />
-      <Route path="/admin/hackathons" element={<ManageHackathons />} />
-      <Route path="/admin/teams" element={<AdminManageTeams />} />
-      <Route path="/admin/submissions" element={<AdminManageSubmissions />} />
-      <Route path="/admin/reports" element={<AdminReports />} />
-      <Route path="/admin/analytics" element={<AdminAnalytics />} />
-      <Route path="/admin/activity" element={<ActivityLogs />} />
-      <Route path="/admin/settings" element={<SystemSettings />} />
-      <Route path="/admin/notifications" element={<AdminNotifications />} />
-      <Route path="/admin/profile" element={<AdminProfile />} />
+      {/* Phase 7 Admin Module Routes (Protected) */}
+      <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+      <Route path="/admin/users" element={<ProtectedRoute><ManageUsers /></ProtectedRoute>} />
+      <Route path="/admin/users/:id" element={<ProtectedRoute><UserDetails /></ProtectedRoute>} />
+      <Route path="/admin/organizers" element={<ProtectedRoute><ManageOrganizers /></ProtectedRoute>} />
+      <Route path="/admin/judges" element={<ProtectedRoute><ManageJudges /></ProtectedRoute>} />
+      <Route path="/admin/hackathons" element={<ProtectedRoute><ManageHackathons /></ProtectedRoute>} />
+      <Route path="/admin/teams" element={<ProtectedRoute><AdminManageTeams /></ProtectedRoute>} />
+      <Route path="/admin/submissions" element={<ProtectedRoute><AdminManageSubmissions /></ProtectedRoute>} />
+      <Route path="/admin/reports" element={<ProtectedRoute><AdminReports /></ProtectedRoute>} />
+      <Route path="/admin/analytics" element={<ProtectedRoute><AdminAnalytics /></ProtectedRoute>} />
+      <Route path="/admin/activity" element={<ProtectedRoute><ActivityLogs /></ProtectedRoute>} />
+      <Route path="/admin/settings" element={<ProtectedRoute><SystemSettings /></ProtectedRoute>} />
+      <Route path="/admin/notifications" element={<ProtectedRoute><AdminNotifications /></ProtectedRoute>} />
+      <Route path="/admin/profile" element={<ProtectedRoute><AdminProfile /></ProtectedRoute>} />
 
-      {/* Showcase & Dashboard Demo */}
+      {/* Showcase & Demos (Protected) */}
       <Route
         path="/showcase"
         element={
-          <PublicLayout>
-            <Showcase />
-          </PublicLayout>
+          <ProtectedRoute>
+            <PublicLayout>
+              <Showcase />
+            </PublicLayout>
+          </ProtectedRoute>
         }
       />
       <Route
         path="/dashboard-demo"
         element={
-          <PublicLayout>
-            <DashboardDemo />
-          </PublicLayout>
+          <ProtectedRoute>
+            <PublicLayout>
+              <DashboardDemo />
+            </PublicLayout>
+          </ProtectedRoute>
         }
       />
 
-      {/* 404 Page */}
+      {/* 404 Page (Protected / Redirect) */}
       <Route
         path="*"
         element={
-          <PublicLayout>
-            <NotFound />
-          </PublicLayout>
+          <ProtectedRoute>
+            <PublicLayout>
+              <NotFound />
+            </PublicLayout>
+          </ProtectedRoute>
         }
       />
     </Routes>

@@ -1,21 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OrganizerLayout from '../../layouts/OrganizerLayout';
 import DashboardStatsCard from '../../components/organizer/DashboardStatsCard';
 import HackathonCard from '../../components/organizer/HackathonCard';
-import RecentRegistrations from '../../components/organizer/RecentRegistrations';
-import ActivityTimeline from '../../components/organizer/ActivityTimeline';
 import NotificationPanel from '../../components/organizer/NotificationPanel';
-import {
-  organizerStats,
-  recentRegistrations,
-  upcomingDeadlines,
-  recentSubmissions,
-  quickActions,
-} from '../../mock/organizerDashboard';
-import { mockHackathons } from '../../mock/hackathons';
+import { useAuth } from '../../context/AuthContext';
+import { quickActions } from '../../mock/organizerDashboard';
 import { notifications } from '../../mock/notifications';
-import { FiPlus, FiArrowRight, FiActivity, FiUsers, FiLayers } from 'react-icons/fi';
+import { fetchDashboardMetrics, fetchPublicHackathons } from '../../services/api';
+import { FiPlus, FiArrowRight, FiActivity, FiUsers, FiLayers, FiInfo } from 'react-icons/fi';
 import {
   BarChart,
   Bar,
@@ -26,31 +19,78 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
-const mockChartData = [
-  { name: 'Mon', regs: 25 },
-  { name: 'Tue', regs: 45 },
-  { name: 'Wed', regs: 38 },
-  { name: 'Thu', regs: 70 },
-  { name: 'Fri', regs: 85 },
-  { name: 'Sat', regs: 110 },
-  { name: 'Sun', regs: 90 },
-];
-
 const OrganizerDashboard = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
-  // Handler for delete hackathon (UI only)
-  const handleDeleteHackathon = (id) => {
-    alert('Hackathon delete is UI-only');
-  };
+  const [metrics, setMetrics] = useState(null);
+  const [hackathons, setHackathons] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadOrganizerData = async () => {
+      const [mRes, hRes] = await Promise.all([
+        fetchDashboardMetrics(),
+        fetchPublicHackathons(),
+      ]);
+      if (isMounted) {
+        setMetrics(mRes);
+        setHackathons(hRes);
+        setLoading(false);
+      }
+    };
+    loadOrganizerData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const displayName = user?.name || user?.email?.split('@')[0] || 'Organizer';
+
+  // Compute real dashboard stats from DB metrics
+  const realOrganizerStats = [
+    {
+      label: 'Active Hackathons',
+      value: hackathons.length,
+      change: hackathons.length > 0 ? `${hackathons.length} published` : '0 events created',
+      changeType: 'positive',
+      icon: FiActivity,
+      color: 'purple',
+    },
+    {
+      label: 'Total Registrations',
+      value: metrics?.overview?.totalRegistrations || 0,
+      change: metrics?.overview?.totalRegistrations ? `+${metrics.overview.totalRegistrations} total` : '0 registered',
+      changeType: 'positive',
+      icon: FiUsers,
+      color: 'blue',
+    },
+    {
+      label: 'Project Submissions',
+      value: metrics?.overview?.totalSubmissions || 0,
+      change: metrics?.overview?.totalSubmissions ? `${metrics.overview.totalSubmissions} received` : '0 submitted',
+      changeType: 'positive',
+      icon: FiLayers,
+      color: 'emerald',
+    },
+    {
+      label: 'Total Platform Users',
+      value: metrics?.overview?.totalUsers || 1,
+      change: 'Active users in DB',
+      changeType: 'neutral',
+      icon: FiUsers,
+      color: 'amber',
+    },
+  ];
 
   return (
     <OrganizerLayout>
       {/* Welcome Banner */}
       <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-purple-900/40 via-indigo-900/20 to-transparent p-6 rounded-2xl border border-purple-500/10">
         <div>
-          <h2 className="text-xl font-bold text-white">Welcome back, Organizer!</h2>
-          <p className="text-xs text-slate-400 mt-1">Here is a quick summary of your hackathons, submissions, and judge assignments.</p>
+          <h2 className="text-xl font-bold text-white">Welcome back, {displayName}!</h2>
+          <p className="text-xs text-slate-400 mt-1">Manage your event registrations, submissions, and judge scoring.</p>
         </div>
         <button
           onClick={() => navigate('/organizer/hackathon/create')}
@@ -61,35 +101,38 @@ const OrganizerDashboard = () => {
         </button>
       </div>
 
-      {/* Stats Cards */}
+      {/* Real Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        {organizerStats.map((stat, i) => (
+        {realOrganizerStats.map((stat, i) => (
           <DashboardStatsCard key={stat.label} stat={stat} index={i} />
         ))}
       </div>
 
       {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        {/* Left Column: Chart, Hackathons */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Analytics Preview Chart */}
           <div className="bg-[#111118] border border-white/5 rounded-2xl p-5">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
                 <FiActivity className="text-purple-400" />
-                Registrations Trend (This Week)
+                Registrations Trend
               </h3>
               <button
                 onClick={() => navigate('/organizer/analytics')}
                 className="text-xs text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1"
               >
-                View Analytics
-                <FiArrowRight size={12} />
+                View Analytics <FiArrowRight size={12} />
               </button>
             </div>
             <div className="h-60 w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={mockChartData}>
+                <BarChart data={[
+                  { name: 'Mon', regs: 0 },
+                  { name: 'Tue', regs: 0 },
+                  { name: 'Wed', regs: 0 },
+                  { name: 'Thu', regs: 0 },
+                  { name: 'Fri', regs: metrics?.overview?.totalRegistrations || 0 },
+                ]}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                   <XAxis dataKey="name" stroke="#64748b" fontSize={10} tickLine={false} />
                   <YAxis stroke="#64748b" fontSize={10} tickLine={false} />
@@ -110,29 +153,41 @@ const OrganizerDashboard = () => {
             </div>
           </div>
 
-          {/* Featured/My Hackathons section */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-bold text-white">Active Hackathons</h3>
+              <h3 className="text-sm font-bold text-white">My Active Hackathons</h3>
               <button
                 onClick={() => navigate('/organizer/hackathons')}
                 className="text-xs text-slate-400 hover:text-white font-semibold flex items-center gap-1"
               >
-                See All
-                <FiArrowRight size={12} />
+                See All <FiArrowRight size={12} />
               </button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {mockHackathons.slice(0, 2).map((h, i) => (
-                <HackathonCard key={h.id} hackathon={h} index={i} onDelete={handleDeleteHackathon} />
-              ))}
-            </div>
+            {hackathons.length === 0 ? (
+              <div className="p-8 text-center bg-[#111118] border border-white/5 rounded-2xl space-y-3">
+                <FiInfo size={28} className="mx-auto text-purple-400" />
+                <h4 className="text-sm font-bold text-white">No Hackathons Created Yet</h4>
+                <p className="text-xs text-slate-400 max-w-sm mx-auto">
+                  Click "Create Hackathon" to publish your first challenge event.
+                </p>
+                <button
+                  onClick={() => navigate('/organizer/hackathon/create')}
+                  className="px-4 py-2 text-xs font-bold bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-all mt-2"
+                >
+                  Create New Event
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {hackathons.slice(0, 2).map((h, i) => (
+                  <HackathonCard key={h._id || h.id} hackathon={h} index={i} onDelete={() => {}} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Right Column: Deadlines, Quick Actions, Recent Registrations */}
         <div className="space-y-6">
-          {/* Quick Actions */}
           <div className="bg-[#111118] border border-white/5 rounded-2xl p-5">
             <h3 className="text-sm font-bold text-white mb-4">Quick Actions</h3>
             <div className="grid grid-cols-2 gap-2.5">
@@ -147,95 +202,6 @@ const OrganizerDashboard = () => {
               ))}
             </div>
           </div>
-
-          {/* Upcoming Deadlines */}
-          <div className="bg-[#111118] border border-white/5 rounded-2xl p-5">
-            <h3 className="text-sm font-bold text-white mb-4">Upcoming Deadlines</h3>
-            <div className="space-y-3">
-              {upcomingDeadlines.map((dl) => (
-                <div
-                  key={dl.id}
-                  className="flex items-start justify-between p-3 rounded-xl bg-white/[0.02] border border-white/5"
-                >
-                  <div>
-                    <h4 className="text-xs font-bold text-white">{dl.title}</h4>
-                    <p className="text-[10px] text-slate-500 mt-1">{dl.date}</p>
-                  </div>
-                  <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase shrink-0 ${
-                    dl.severity === 'high' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
-                    dl.severity === 'medium' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
-                    'bg-blue-500/10 text-blue-400 border border-blue-500/20'
-                  }`}>
-                    {dl.remaining}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Recent Registrations mini widget */}
-          <div className="bg-[#111118] border border-white/5 rounded-2xl p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-                <FiUsers className="text-blue-400" />
-                Recent Registrations
-              </h3>
-              <button
-                onClick={() => navigate('/organizer/registrations')}
-                className="text-xs text-purple-400 hover:text-purple-300 font-semibold"
-              >
-                Manage
-              </button>
-            </div>
-            <RecentRegistrations registrations={recentRegistrations} />
-          </div>
-        </div>
-      </div>
-
-      {/* Lower Row: Recent Submissions & Notifications */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Recent Submissions */}
-        <div className="lg:col-span-2 bg-[#111118] border border-white/5 rounded-2xl p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-              <FiLayers className="text-emerald-400" />
-              Recent Submissions
-            </h3>
-            <button
-              onClick={() => navigate('/organizer/submissions')}
-              className="text-xs text-slate-400 hover:text-white font-semibold flex items-center gap-1"
-            >
-              See All
-              <FiArrowRight size={12} />
-            </button>
-          </div>
-
-          <div className="space-y-3">
-            {recentSubmissions.map((sub) => (
-              <div
-                key={sub.id}
-                className="flex items-center justify-between p-3.5 rounded-xl bg-white/[0.02] border border-white/5"
-              >
-                <div>
-                  <h4 className="text-xs font-bold text-white">{sub.projectName}</h4>
-                  <p className="text-[10px] text-slate-500 mt-0.5">Team: {sub.teamName} · {sub.hackathon}</p>
-                </div>
-                <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase ${
-                  sub.status === 'approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                  sub.status === 'under_review' ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20' :
-                  'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                }`}>
-                  {sub.status.replace('_', ' ')}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Notifications Widget */}
-        <div className="bg-[#111118] border border-white/5 rounded-2xl p-5">
-          <h3 className="text-sm font-bold text-white mb-4">Notification Center</h3>
-          <NotificationPanel notifications={notifications.slice(0, 3)} />
         </div>
       </div>
     </OrganizerLayout>

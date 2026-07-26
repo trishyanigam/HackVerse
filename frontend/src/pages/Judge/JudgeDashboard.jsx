@@ -6,6 +6,7 @@ import ActivityFeed from '../../components/judge/ActivityFeed';
 import { judgeStats, recentEvaluations, upcomingDeadlines } from '../../mock/judgeDashboard';
 import { motion } from 'framer-motion';
 import { FiClock, FiAlertTriangle } from 'react-icons/fi';
+import { useAuth } from '../../context/AuthContext';
 
 const statsData = [
   { id: 1, type: 'assigned', label: 'Assigned Projects', value: judgeStats.find(s => s.type === 'assigned')?.value || 8, change: 'Across 2 hackathons' },
@@ -21,13 +22,16 @@ const activityFromEvaluations = recentEvaluations.map((e) => ({
 }));
 
 const JudgeDashboard = () => {
+  const { user } = useAuth();
+  const displayName = user?.name || user?.email?.split('@')[0] || 'Judge';
+
   return (
     <JudgeLayout>
       <div className="space-y-8">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-          <h2 className="text-2xl font-bold text-white">Welcome back, Judge! 👋</h2>
-          <p className="text-sm text-slate-500 mt-1">Here's an overview of your judging activity.</p>
+          <h2 className="text-2xl font-bold text-white">Welcome back, {displayName}! 👋</h2>
+          <p className="text-sm text-slate-500 mt-1">Here's an overview of your evaluation assignments and history.</p>
         </motion.div>
 
         {/* Stats Grid */}
@@ -45,7 +49,6 @@ const JudgeDashboard = () => {
 
         {/* Bottom Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Recent Activity */}
           <div className="bg-[#111118] border border-white/5 rounded-2xl p-5">
             <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
               <span className="w-1 h-4 rounded-full bg-gradient-to-b from-purple-500 to-blue-500 inline-block" />
@@ -54,7 +57,6 @@ const JudgeDashboard = () => {
             <ActivityFeed activities={activityFromEvaluations} />
           </div>
 
-          {/* Upcoming Deadlines */}
           <div className="bg-[#111118] border border-white/5 rounded-2xl p-5">
             <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
               <span className="w-1 h-4 rounded-full bg-gradient-to-b from-amber-500 to-orange-500 inline-block" />

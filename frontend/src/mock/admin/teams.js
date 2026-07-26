@@ -1,5 +1,5 @@
 export const adminTeams = [
-  { id: 't001', teamName: 'ByteBuilders', leader: 'Aryan Sharma', members: 3, hackathon: 'CodeSprint 2026', submissionStatus: 'submitted', createdAt: '2026-07-05T10:00:00Z' },
+  { id: 't001', teamName: 'ByteBuilders', leader: 'Trishya Nigam', members: 3, hackathon: 'CodeSprint 2026', submissionStatus: 'submitted', createdAt: '2026-07-05T10:00:00Z' },
   { id: 't002', teamName: 'ChainCraft', leader: 'Kabir Mehta', members: 2, hackathon: 'Web3 Innovate', submissionStatus: 'submitted', createdAt: '2026-07-12T09:00:00Z' },
   { id: 't003', teamName: 'Neural Nexus', leader: 'Divya Krishnan', members: 4, hackathon: 'AI Builder Fest', submissionStatus: 'submitted', createdAt: '2026-05-05T11:00:00Z' },
   { id: 't004', teamName: 'QuantumLeap', leader: 'Vikram Singh', members: 3, hackathon: 'Web3 Innovate', submissionStatus: 'pending', createdAt: '2026-07-15T14:00:00Z' },

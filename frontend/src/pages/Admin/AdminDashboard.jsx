@@ -7,11 +7,14 @@ import NotificationCard from '../../components/admin/NotificationCard';
 import AnalyticsCard from '../../components/admin/AnalyticsCard';
 import { adminStats, adminQuickActions, adminRecentActivity } from '../../mock/admin/dashboard';
 import { adminNotifications } from '../../mock/admin/notifications';
-import { roleDistribution, userGrowth } from '../../mock/admin/analytics';
+import { roleDistribution } from '../../mock/admin/analytics';
 import { motion } from 'framer-motion';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, Legend } from 'recharts';
+import { ResponsiveContainer, PieChart, Pie, Cell, Legend, Tooltip } from 'recharts';
+import { useAuth } from '../../context/AuthContext';
 
 const AdminDashboard = () => {
+  const { user } = useAuth();
+  const displayName = user?.name || user?.email?.split('@')[0] || 'Administrator';
   const currentHour = new Date().getHours();
   const greeting = currentHour < 12 ? 'Good Morning' : currentHour < 18 ? 'Good Afternoon' : 'Good Evening';
 
@@ -25,7 +28,7 @@ const AdminDashboard = () => {
           className="bg-gradient-to-r from-purple-500/10 to-indigo-500/5 border border-purple-500/10 rounded-2xl p-6 shadow-md"
         >
           <h2 className="text-xl font-bold text-white tracking-wide">
-            {greeting}, Administrator!
+            {greeting}, {displayName}!
           </h2>
           <p className="text-xs text-slate-400 mt-1 leading-relaxed">
             Welcome to the HackVerse Super Control Panel. Here you can monitor system status, manage users, audit submissions, and evaluate server performance metrics.

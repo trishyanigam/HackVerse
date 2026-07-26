@@ -2,27 +2,29 @@ import React, { useState } from 'react';
 import JudgeLayout from '../../layouts/JudgeLayout';
 import { evaluationHistory } from '../../mock/evaluations';
 import { motion } from 'framer-motion';
-import { FiUser, FiMail, FiLinkedin, FiAward, FiEdit2, FiSave, FiX } from 'react-icons/fi';
+import { FiMail, FiLinkedin, FiAward, FiEdit2, FiSave, FiX } from 'react-icons/fi';
 import toast from 'react-hot-toast';
-
-const mockProfile = {
-  name: 'Dr. Priya Sharma',
-  email: 'priya.sharma@hackverse.dev',
-  designation: 'Senior Software Engineer & Hackathon Judge',
-  organization: 'TechNova Labs',
-  linkedin: 'linkedin.com/in/priya-sharma',
-  expertise: ['Full-Stack Development', 'AI/ML', 'Web3', 'System Design'],
-  bio: 'Experienced software engineer with 8+ years in building scalable products. Passionate about open innovation and mentoring the next generation of developers. Frequent hackathon judge at national and international events.',
-  avatar: null,
-  hackathonsJudged: 12,
-  totalEvaluations: evaluationHistory.length,
-  avgScore: Math.round(evaluationHistory.reduce((a, e) => a + e.score, 0) / evaluationHistory.length),
-};
+import { useAuth } from '../../context/AuthContext';
 
 const JudgeProfile = () => {
+  const { user: authUser } = useAuth();
   const [editing, setEditing] = useState(false);
-  const [profile, setProfile] = useState(mockProfile);
-  const [draft, setDraft] = useState(mockProfile);
+
+  const [profile, setProfile] = useState({
+    name: authUser?.name || authUser?.email?.split('@')[0] || 'Judge Evaluator',
+    email: authUser?.email || 'judge@hackverse.dev',
+    designation: 'Senior Domain Expert & Hackathon Judge',
+    organization: 'TechNova Labs',
+    linkedin: 'linkedin.com/in/judge',
+    expertise: ['Full-Stack Development', 'AI/ML', 'Web3', 'System Design'],
+    bio: 'Experienced software engineer with 8+ years in building scalable products. Passionate about open innovation and mentoring developer squads.',
+    avatar: null,
+    hackathonsJudged: 12,
+    totalEvaluations: evaluationHistory.length,
+    avgScore: Math.round(evaluationHistory.reduce((a, e) => a + e.score, 0) / evaluationHistory.length),
+  });
+
+  const [draft, setDraft] = useState({ ...profile });
 
   const handleSave = () => {
     setProfile(draft);
@@ -35,6 +37,11 @@ const JudgeProfile = () => {
     setEditing(false);
   };
 
+  const userInitials = (profile.name
+    ? profile.name.split(' ').map((n) => n[0]).join('').slice(0, 2)
+    : 'JD'
+  ).toUpperCase();
+
   const profileStats = [
     { label: 'Hackathons Judged', value: profile.hackathonsJudged },
     { label: 'Projects Evaluated', value: profile.totalEvaluations },
@@ -44,7 +51,6 @@ const JudgeProfile = () => {
   return (
     <JudgeLayout>
       <div className="space-y-6 max-w-3xl">
-        {/* Header */}
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-white">My Profile</h2>
@@ -52,7 +58,10 @@ const JudgeProfile = () => {
           </div>
           {!editing ? (
             <button
-              onClick={() => setEditing(true)}
+              onClick={() => {
+                setDraft({ ...profile });
+                setEditing(true);
+              }}
               className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/5 hover:bg-white/10 rounded-xl text-sm font-semibold text-slate-300 transition-all"
             >
               <FiEdit2 size={14} /> Edit Profile
@@ -75,14 +84,13 @@ const JudgeProfile = () => {
           )}
         </motion.div>
 
-        {/* Avatar + Basic Info */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-[#111118] border border-white/5 rounded-2xl p-6 flex flex-col sm:flex-row gap-5 items-start"
         >
           <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-white text-2xl font-bold shrink-0 shadow-lg">
-            {profile.name.charAt(0)}
+            {userInitials}
           </div>
           <div className="flex-1 min-w-0 space-y-3">
             {editing ? (
@@ -127,7 +135,6 @@ const JudgeProfile = () => {
           </div>
         </motion.div>
 
-        {/* Stats */}
         <div className="grid grid-cols-3 gap-4">
           {profileStats.map((s, i) => (
             <motion.div
@@ -143,7 +150,6 @@ const JudgeProfile = () => {
           ))}
         </div>
 
-        {/* Bio */}
         <div className="bg-[#111118] border border-white/5 rounded-2xl p-5 space-y-3">
           <h4 className="text-xs text-slate-500 uppercase font-bold tracking-wider">Bio</h4>
           {editing ? (
@@ -158,7 +164,6 @@ const JudgeProfile = () => {
           )}
         </div>
 
-        {/* Expertise */}
         <div className="bg-[#111118] border border-white/5 rounded-2xl p-5 space-y-3">
           <h4 className="text-xs text-slate-500 uppercase font-bold tracking-wider flex items-center gap-2">
             <FiAward size={13} /> Areas of Expertise

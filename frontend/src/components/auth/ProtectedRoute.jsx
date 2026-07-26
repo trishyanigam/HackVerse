@@ -1,13 +1,22 @@
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useAuth } from '../../context/AuthContext';
 
-export const ProtectedRoute = ({
-  isAuthenticated = true, // Mock authentication state (defaults to true for preview)
-  redirectPath = '/login',
-  children
-}) => {
+export const ProtectedRoute = ({ children, redirectPath = '/login' }) => {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      toast.error('Access Restricted. Please log in to access this page.', {
+        id: 'auth-restricted-toast',
+      });
+    }
+  }, [isAuthenticated, location.pathname]);
+
   if (!isAuthenticated) {
-    return <Navigate to={redirectPath} replace />;
+    return <Navigate to={redirectPath} state={{ from: location }} replace />;
   }
 
   return children ? children : <Outlet />;

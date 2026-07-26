@@ -1,5 +1,5 @@
 export const adminUsers = [
-  { id: 'u001', name: 'Aryan Sharma', email: 'aryan@example.com', role: 'participant', status: 'active', registeredAt: '2026-01-15T08:00:00Z', avatar: null, hackathons: 4, teams: 2, submissions: 3 },
+  { id: 'u001', name: 'Trishya Nigam', email: 'trishya@example.com', role: 'participant', status: 'active', registeredAt: '2026-01-15T08:00:00Z', avatar: null, hackathons: 4, teams: 2, submissions: 3 },
   { id: 'u002', name: 'Priya Gupta', email: 'priya@example.com', role: 'organizer', status: 'active', registeredAt: '2026-02-01T10:00:00Z', avatar: null, hackathons: 6, teams: 0, submissions: 0 },
   { id: 'u003', name: 'Rohan Verma', email: 'rohan@example.com', role: 'participant', status: 'blocked', registeredAt: '2026-03-10T14:00:00Z', avatar: null, hackathons: 1, teams: 1, submissions: 1 },
   { id: 'u004', name: 'Dr. Anita Joshi', email: 'anita@example.com', role: 'judge', status: 'active', registeredAt: '2026-01-20T09:00:00Z', avatar: null, hackathons: 0, teams: 0, submissions: 0 },

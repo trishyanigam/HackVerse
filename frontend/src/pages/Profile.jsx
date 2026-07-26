@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiUser, FiMail, FiPhone, FiBookOpen, FiEdit2, FiCheck, FiShield } from 'react-icons/fi';
+import { FiUser, FiMail, FiPhone, FiBookOpen, FiEdit2, FiShield } from 'react-icons/fi';
 import PageContainer from '../components/ui/PageContainer';
 import Card from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
@@ -8,12 +8,15 @@ import Modal from '../components/ui/Modal';
 import Input from '../components/forms/Input';
 import Textarea from '../components/forms/Textarea';
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 export const Profile = () => {
-  const [user, setUser] = useState({
-    name: 'Trishya Nigam',
-    email: 'trishya@hackverse.io',
-    role: 'Participant',
+  const { user: authUser } = useAuth();
+
+  const [profile, setProfile] = useState({
+    name: authUser?.name || 'Registered Hacker',
+    email: authUser?.email || 'hacker@hackverse.io',
+    role: (authUser?.role || 'Participant').toUpperCase(),
     college: 'Stanford University (CS & AI Lab)',
     phone: '+1 (555) 234-5678',
     bio: 'Full-stack AI developer specializing in autonomous LLM workflows and Web3 integrations. Competing in hackathons to deploy production-ready tools.',
@@ -21,11 +24,11 @@ export const Profile = () => {
   });
 
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [formData, setFormData] = useState({ ...user });
+  const [formData, setFormData] = useState({ ...profile });
 
   const handleSaveProfile = (e) => {
     e.preventDefault();
-    setUser({ ...formData });
+    setProfile({ ...formData });
     setEditModalOpen(false);
     toast.success('Profile updated successfully!');
   };
@@ -50,61 +53,61 @@ export const Profile = () => {
         <Card className="lg:col-span-1 text-center p-6 space-y-4">
           <div className="relative inline-block mx-auto">
             <img
-              src={user.avatar}
-              alt={user.name}
+              src={profile.avatar}
+              alt={profile.name}
               className="w-28 h-28 rounded-full object-cover border-2 border-brand-purple shadow-xl mx-auto"
             />
             <span className="absolute bottom-1 right-1 h-4 w-4 bg-emerald-400 border-2 border-dark-card rounded-full" />
           </div>
 
           <div className="space-y-1">
-            <h2 className="text-xl font-bold text-white tracking-wide">{user.name}</h2>
-            <p className="text-xs text-slate-400">{user.email}</p>
+            <h2 className="text-xl font-bold text-white tracking-wide">{profile.name}</h2>
+            <p className="text-xs text-slate-400">{profile.email}</p>
           </div>
 
           <div className="pt-2 flex justify-center">
             <Badge variant="primary" size="md" dot>
-              {user.role}
+              {profile.role}
             </Badge>
           </div>
         </Card>
 
-        {/* Right Side: Detailed Profile Form Details */}
+        {/* Right Side: Detailed Profile Details */}
         <Card title="Account Details" className="lg:col-span-2 space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs">
             <div className="space-y-1">
               <span className="text-slate-500 font-semibold uppercase text-[10px] tracking-wider flex items-center gap-1">
                 <FiUser /> Full Name
               </span>
-              <p className="text-sm font-semibold text-white">{user.name}</p>
+              <p className="text-sm font-semibold text-white">{profile.name}</p>
             </div>
 
             <div className="space-y-1">
               <span className="text-slate-500 font-semibold uppercase text-[10px] tracking-wider flex items-center gap-1">
                 <FiMail /> Email Address
               </span>
-              <p className="text-sm font-semibold text-white">{user.email}</p>
+              <p className="text-sm font-semibold text-white">{profile.email}</p>
             </div>
 
             <div className="space-y-1">
               <span className="text-slate-500 font-semibold uppercase text-[10px] tracking-wider flex items-center gap-1">
                 <FiShield /> Platform Role
               </span>
-              <p className="text-sm font-semibold text-brand-purple">{user.role}</p>
+              <p className="text-sm font-semibold text-brand-purple">{profile.role}</p>
             </div>
 
             <div className="space-y-1">
               <span className="text-slate-500 font-semibold uppercase text-[10px] tracking-wider flex items-center gap-1">
                 <FiBookOpen /> College / Organization
               </span>
-              <p className="text-sm font-semibold text-white">{user.college}</p>
+              <p className="text-sm font-semibold text-white">{profile.college}</p>
             </div>
 
             <div className="space-y-1">
               <span className="text-slate-500 font-semibold uppercase text-[10px] tracking-wider flex items-center gap-1">
                 <FiPhone /> Contact Phone
               </span>
-              <p className="text-sm font-semibold text-white">{user.phone}</p>
+              <p className="text-sm font-semibold text-white">{profile.phone}</p>
             </div>
           </div>
 
@@ -113,7 +116,7 @@ export const Profile = () => {
               Developer Bio
             </span>
             <p className="text-xs text-slate-300 leading-relaxed bg-dark-bg/60 p-4 rounded-lg border border-dark-border/30">
-              {user.bio}
+              {profile.bio}
             </p>
           </div>
         </Card>
