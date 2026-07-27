@@ -1,160 +1,65 @@
-# HackVerse — Enterprise Hackathon Management Platform
+# 🚀 HackVerse — Hackathon Management Platform
 
-[![CI/CD Pipeline](https://github.com/trishyanigam/HackVerse/actions/workflows/node.yml/badge.svg)](https://github.com/trishyanigam/HackVerse/actions)
-[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)](https://nodejs.org/)
-[![Swagger API Docs](https://img.shields.io/badge/Swagger-OpenAPI%203.0-green.svg)](http://localhost:5000/api-docs)
+[![Live App](https://img.shields.io/badge/Live%20Demo-Vercel-000000?style=for-the-badge&logo=vercel)](https://hack-verse-gamma.vercel.app/)
+[![Backend API](https://img.shields.io/badge/API-Render-46E3B7?style=for-the-badge&logo=render&logoColor=black)](https://hackverse-7tnb.onrender.com/)
 
-HackVerse is an end-to-end, enterprise-grade Hackathon Management Platform built with the MERN stack (MongoDB, Express.js, React.js, Node.js). Designed for scalability, security, and developer productivity, HackVerse streamlines hackathon creation, participant registration, team formation, project submissions, judge evaluations, automated ranking leaderboards, PDF certificate generation, and real-time analytics.
+**HackVerse** is an end-to-end, enterprise-grade Hackathon Management Platform built with the MERN stack (MongoDB, Express.js, React.js, Node.js). Designed for seamless hackathon organization, team formation, project submissions, judging evaluations, and automated leaderboards.
 
 ---
 
-## 🚀 Key Features
+## 🌐 Live Deployment Links
 
-- 🔐 **Authentication & Role-Based Authorization**: JWT access/refresh token rotation, HTTP-only cookie support, password reset workflows, and multi-role guards (`ADMIN`, `ORGANIZER`, `JUDGE`, `PARTICIPANT`).
-- 🏆 **Hackathon Lifecycle Management**: Full CRUD support with auto-slug generation, image uploads, registration open/close controls, status transitions, and timeline tracking.
-- 👥 **Team Formation & Invitations**: Auto-leader binding, unique `teamCode` and `inviteCode` generation, max members enforcement, leadership transfer, and invite link management.
-- 📝 **Project Submissions**: Multipart form submission with screenshots and PDF deck uploads, deadline enforcement, and edit locks during review.
-- ⚖️ **7-Criteria Judge Evaluation Engine**: Structured 0-10 scoring across Innovation, Technical Complexity, UI/UX, Functionality, Scalability, Documentation, and Presentation.
-- 📊 **Automated Leaderboard & Tie-Breaker Algorithm**: Instant rank generation based on average judge scores with submission timestamp tie-breaking.
-- 📜 **PDFKit Certificate Generation**: Automated issuance of verified PDF certificates for Winners, Runners-Up, Participants, and Judges.
-- 📈 **Analytics & Report Exporter**: Real-time platform metrics, interactive charts, and `json2csv` exporter.
-- ⏰ **Automated Background Schedulers**: Node-cron background jobs for deadline reminders, judge notifications, and cleanup tasks.
-- 🛡️ **Production Hardening**: Rate limiting, GZIP compression, HTTP Parameter Pollution protection, MongoDB injection sanitization, Helmet security headers, and Swagger OpenAPI 3.0 documentation.
+- **Frontend App (Vercel)**: [https://hack-verse-gamma.vercel.app/](https://hack-verse-gamma.vercel.app/)
+- **Backend API (Render)**: [https://hackverse-7tnb.onrender.com/](https://hackverse-7tnb.onrender.com/)
+- **API Documentation**: [https://hackverse-7tnb.onrender.com/api-docs](https://hackverse-7tnb.onrender.com/api-docs)
 
 ---
 
-## 🛠️ Technology Stack
+## ✨ Key Features
 
-| Layer | Technology |
-|-------|------------|
-| **Backend Runtime** | Node.js (v20+ LTS), Express.js (v5) |
-| **Database** | MongoDB, Mongoose ORM |
-| **Authentication** | JSON Web Tokens (JWT), bcrypt |
-| **Documentation** | Swagger UI Express, Swagger JSDoc (OpenAPI 3.0) |
-| **Security** | Helmet, Express Rate Limit, HPP, Mongo Sanitize |
-| **File Processing** | Multer, PDFKit |
-| **Scheduling & Exports** | Node-Cron, json2csv, Nodemailer |
-| **Testing** | Jest, Supertest |
-| **Containerization & CI** | Docker, Docker Compose, GitHub Actions |
+- 🔐 **Role-Based Auth**: Secure JWT authentication supporting `ADMIN`, `ORGANIZER`, `JUDGE`, and `PARTICIPANT`.
+- 🏆 **Hackathon Management**: Full lifecycle tracking, auto-slug generation, registration controls, and custom rules.
+- 👥 **Team Formation**: Create teams, invite members via `teamCode` / `inviteCode`, and manage team rosters.
+- 📝 **Project Submissions**: Multipart form submission with deck uploads and edit lock during evaluation.
+- ⚖️ **7-Criteria Evaluation Engine**: Structured judge scoring with automated score computation.
+- 📊 **Real-time Leaderboard**: Instant rank calculation based on judge scores with tie-breaker logic.
+- 📜 **Automated PDF Certificates**: Instant issuance of verified certificates for participants and winners.
+- 🛡️ **Production Hardened**: Rate limiting, GZIP compression, CORS policy, Security headers (Helmet), and query sanitization.
 
 ---
 
-## 🏗️ Architecture & Folder Structure
+## 🛠️ Tech Stack
 
-```
-HackathonManagement/
-├── .github/
-│   └── workflows/
-│       └── node.yml               ← CI/CD pipeline workflow
-├── backend/
-│   ├── config/
-│   │   ├── database.js            ← MongoDB connection setup
-│   │   ├── multer.js              ← Disk storage configuration
-│   │   └── swagger.js             ← Swagger OpenAPI specification
-│   ├── constants/                 ← Global enums & role definitions
-│   ├── controllers/               ← Thin HTTP request handlers
-│   ├── middleware/                ← Security, auth, validation, upload middleware
-│   ├── models/                    ← Mongoose schema models
-│   ├── routes/                    ← Express router declarations
-│   ├── services/                  ← Core business & domain logic services
-│   ├── tests/                     ← Jest & Supertest integration test suite
-│   ├── uploads/                   ← Local static file storage
-│   ├── utils/                     ← Helper utilities (JWT, logger, password)
-│   ├── validators/                ← express-validator schemas
-│   ├── app.js                     ← Express app bootstrap & middleware setup
-│   ├── Dockerfile                 ← Backend Docker container definition
-│   ├── package.json               ← Node dependencies & scripts
-│   └── server.js                  ← HTTP server listener & cron bootstrapper
-├── docs/
-│   └── architecture.md            ← In-depth architectural workflow specs
-├── frontend/                      ← Vite React frontend application
-├── docker-compose.yml             ← Multi-container orchestration (Mongo, Backend, Frontend)
-├── .env.production.example        ← Production environment variables template
-└── README.md                      ← Project documentation
-```
+- **Frontend**: React 19, Vite, React Router v7, TailwindCSS, Lucide Icons, Framer Motion
+- **Backend**: Node.js, Express 5, MongoDB, Mongoose
+- **Deployment**: Vercel (Frontend), Render (Backend), MongoDB Atlas (Database)
 
 ---
 
-## ⚡ Quick Start & Installation
+## 💻 Local Development Setup
 
-### Prerequisites
-- Node.js >= 20.x
-- MongoDB (Local instance or MongoDB Atlas URI)
-- Git & Docker (optional)
-
-### 1. Clone Repository
+### 1. Clone & Install
 ```bash
 git clone https://github.com/trishyanigam/HackVerse.git
-cd HackathonManagement
+cd HackVerse
 ```
 
-### 2. Setup Backend
+### 2. Run Backend
 ```bash
 cd backend
 npm install
-cp .env.example .env
-```
-*Configure `MONGO_URI` and `JWT_ACCESS_SECRET` in `.env`.*
-
-### 3. Run Local Development Server
-```bash
 npm run dev
 ```
-The backend API will be available at: `http://localhost:5000/api/v1`  
-Interactive Swagger API documentation: `http://localhost:5000/api-docs`
 
----
-
-## 🧪 Testing
-
-Run unit and integration test suites using Jest and Supertest:
+### 3. Run Frontend
 ```bash
-cd backend
-npm test
+cd frontend
+npm install
+npm run dev
 ```
-
----
-
-## 🐳 Docker Deployment
-
-To spin up the entire production stack (MongoDB, Express Backend, React Frontend) via Docker Compose:
-
-```bash
-docker-compose up --build -d
-```
-
-- **Frontend Application**: `http://localhost:5173`
-- **Backend API Server**: `http://localhost:5000`
-- **Swagger Documentation**: `http://localhost:5000/api-docs`
-
----
-
-## 📖 API Documentation Summary
-
-| Endpoint Group | Base Path | Key Capabilities |
-|----------------|-----------|------------------|
-| **Auth** | `/api/v1/auth` | Register, Login, Refresh Token, Reset Password, Get Profile |
-| **Hackathons** | `/api/v1/hackathons` | CRUD, Search, Filter, Open/Close Registration, My Hackathons |
-| **Registrations** | `/api/v1/registrations` | Register, Cancel, Organizer Approval/Rejection |
-| **Teams** | `/api/v1/teams` | Create, Join via Code, Invite Members, Transfer Leader, Leave, Disband |
-| **Submissions** | `/api/v1/submissions` | Create Project, Upload PDF/Images, Edit, Delete, View |
-| **Reviews** | `/api/v1/reviews` | Assigned Submissions, 7-Criteria Scoring, Update Review |
-| **Leaderboard** | `/api/v1/leaderboard` | Generate Ranks, Publish Results, Export CSV |
-| **Notifications** | `/api/v1/notifications` | User Notifications, Unread Counter, Mark Read, Delete |
-| **Certificates** | `/api/v1/certificates` | Batch Generate PDF Certificates, Download, List |
-| **Reports** | `/api/v1/reports` | Dashboard Metrics, Analytics Breakdown, CSV Export |
-
----
-
-## 🔮 Future Enhancements
-
-- 🌐 Cloud Storage Integration (Cloudinary / AWS S3 SDK wrappers).
-- 💬 Real-Time Live Chat & Mentorship Channels via Socket.io.
-- 📱 Mobile App SDK Integration for Event Check-Ins.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the [ISC License](LICENSE).
+This project is licensed under the **ISC License**.
