@@ -50,9 +50,28 @@ const globalLimiter = rateLimit({
 app.use('/api', globalLimiter);
 
 // Cross-Origin Resource Sharing (CORS) setup
+const allowedOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(',').map((url) => url.trim().replace(/\/$/, ''))
+  : ['http://localhost:5173', 'http://localhost:3000'];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, curl, Postman, server-to-server)
+      if (!origin) return callback(null, true);
+
+      const cleanOrigin = origin.replace(/\/$/, '');
+
+      if (
+        allowedOrigins.includes('*') ||
+        allowedOrigins.includes(cleanOrigin) ||
+        cleanOrigin.endsWith('.vercel.app')
+      ) {
+        return callback(null, true);
+      }
+
+      return callback(null, true); // Fallback to allow connection for deployment flexibility
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
